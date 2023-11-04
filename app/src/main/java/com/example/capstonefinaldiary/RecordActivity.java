@@ -59,6 +59,7 @@ public class RecordActivity extends AppCompatActivity {
     // 오디오 파일 녹음 관련 변수
     private MediaRecorder mediaRecorder;
     private String audioFileName;
+    private String fileName;
     private boolean isRecording = false;
     private boolean isPaused = false; // 녹음이 중지된 상태인지 여부를 나타내는 플래그
     private Uri audioUri = null; // 오디오 파일 uri
@@ -195,6 +196,7 @@ public class RecordActivity extends AppCompatActivity {
             String currentTime = sdf.format(new Date());
 
             audioFileName = getExternalCacheDir().getAbsolutePath() + "/Record_" + currentTime + ".aac";
+            fileName = "Record_" + currentTime + ".aac";
 
             // Firebase Storage 루트 경로 설정 (수정)
             storageRef = storage.getReference().child("audio");
@@ -299,6 +301,7 @@ public class RecordActivity extends AppCompatActivity {
                 StorageMetadata metadata = new StorageMetadata.Builder()
                         .setContentType("audio/aac")
                         .build();
+                // firebase Storage에 오디오 파일(url)저장
                 audioRef.putFile(audioUri, metadata)
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -311,7 +314,7 @@ public class RecordActivity extends AppCompatActivity {
                                         String audioUri = downloadUri.toString();
                                         // 업로드된 파일의 URL을 사용하거나 저장할 수 있습니다.
                                         // 예를 들어 Firebase Realtime Database에 저장할 수 있습니다.
-                                        saveAudioFileInfoToDatabase(audioFileName, audioUri); // Firebase Realtime Database에 오디오 파일 정보 저장
+                                        saveAudioFileInfoToDatabase(fileName, audioUri); // Firebase Realtime Database에 오디오 파일 정보 저장
                                     }
                                 });
 
