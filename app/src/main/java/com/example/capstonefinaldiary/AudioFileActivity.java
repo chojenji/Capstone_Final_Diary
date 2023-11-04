@@ -54,7 +54,7 @@ public class AudioFileActivity extends AppCompatActivity {
     private TextView playTimeTextView; //진행시간
     private TextView totalTimeTextView; //완료시간 (오디오 파일 총 길이)
     private int lastPlayedPosition = -1;
-    private ImageButton playImageBtn, stopImageBtn;
+    private ImageButton playImageBtn;
 
     /** 리사이클러뷰
      * Firebase database 및 Storage */
@@ -126,7 +126,7 @@ public class AudioFileActivity extends AppCompatActivity {
         // 변수 초기화
         audioIcon = null;
         isPlaying = false;
-        //isPaused = false;
+        isPaused = false;
         lastPlayedPosition = -1;
 
 
@@ -214,7 +214,7 @@ public class AudioFileActivity extends AppCompatActivity {
                 public void onPrepared(MediaPlayer mp) {
                     mp.start();
                     isPlaying = true;
-                    //isPaused = false;
+                    isPaused = false;
                     // 재생관련 버튼 가시성 (UI)
                     playImageBtn.setImageResource(R.drawable.baseline_pause_24);
                     seekBar.setMax(mp.getDuration());
@@ -233,10 +233,11 @@ public class AudioFileActivity extends AppCompatActivity {
         if (mediaPlayer != null && isPaused) {
             mediaPlayer.start();
             isPlaying = true;
-            //isPaused = false;
+            isPaused = false;
             // 재생관련 버튼 가시성 (UI)
             playImageBtn.setImageResource(R.drawable.baseline_pause_24);
             Log.d("AudioFileActivity", "resumeAudio() called"); // 디버깅을 위한 로그
+            updateSeekBar();
         }
     }
 
@@ -248,6 +249,7 @@ public class AudioFileActivity extends AppCompatActivity {
             isPaused = true;
             // 재생관련 버튼 가시성 (UI)
             playImageBtn.setImageResource(R.drawable.baseline_play_arrow_24);
+            updateSeekBar();
         }
     }
 
@@ -272,7 +274,7 @@ public class AudioFileActivity extends AppCompatActivity {
             final int duration = mediaPlayer.getDuration();
             seekBar.setMax(duration);
             totalTimeTextView.setText(formatTime(duration));
-            playTimeTextView.setText(formatTime(0));
+            //playTimeTextView.setText(formatTime(0));
 
             new Thread(new Runnable() {
                 @Override
@@ -296,13 +298,6 @@ public class AudioFileActivity extends AppCompatActivity {
             }).start();
         }
     }
-    /**
-    private void resetSeekBar() {
-        seekBar.setProgress(0);
-        playTimeTextView.setText(formatTime(0));
-        totalTimeTextView.setText(formatTime(0));
-    }
-     */
 
     private String formatTime(int millis) {
         int seconds = (millis / 1000) % 60;
