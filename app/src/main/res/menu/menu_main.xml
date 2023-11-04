@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_setting"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="설정"/>
+    <item
+        android:id="@+id/menu_statistics"
+        android:icon="@drawable/baseline_bar_chart_24"
+        android:contentDescription="주간월간기분통계"
+        android:title="분석"/>
+    <item
+        android:id="@+id/menu_file"
+        android:icon="@drawable/audio_file"
+        android:contentDescription="녹음파일라이브러리"
+        android:title="타임라인"/>
+    <item
+        android:id="@+id/menu_music"
+        android:icon="@drawable/baseline_queue_music_24"
+        android:contentDescription="음악플레이리스트"
+        android:title="음악"/>
+
+</menu>
