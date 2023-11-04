@@ -28,6 +28,7 @@ public class AudioAdapter extends RecyclerView.Adapter{
 
     //리사이클러뷰에 넣을 데이터 리스트
     private ArrayList<AudioFileInfo> dataModels;
+    // Firebase 오디오 파일 URL을 저장할 리스트
     private Context context;
 
     // 리스너 객체 참조를 저장하는 변수
@@ -63,7 +64,6 @@ public class AudioAdapter extends RecyclerView.Adapter{
         //데이터 리스트의 크기를 전달해주어야 함
         return dataModels.size();
     }
-
 
     @NonNull
     @Override

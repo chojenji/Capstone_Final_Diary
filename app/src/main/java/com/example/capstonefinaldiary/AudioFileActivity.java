@@ -11,6 +11,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,10 +25,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.capstonefinaldiary.Models.AudioFileInfo;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -62,7 +66,9 @@ public class AudioFileActivity extends AppCompatActivity {
     /** 검색창 */
     private SearchView searchView;
     /** 메뉴바 */
-    //private MenuActivity menuActivity; // MenuActivity를 포함할 멤버 변수
+    private MenuActivity menuActivity; // MenuActivity를 포함할 멤버 변수
+    private NavigationView navigationView;
+    private DrawerLayout drawerLayout;
 
     // 권한 요청 코드 (예: 1)
     private static final int PERMISSION_REQUEST_CODE = 21;
@@ -71,12 +77,8 @@ public class AudioFileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_audio_file);
-        //menuActivity = new MenuActivity(this); // BaseActivity 인스턴스 생성
-
-        /**
-         // AudioManager를 사용하여 오디오 스트림 설정
-         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), AudioManager.FLAG_PLAY_SOUND);*/
+        //메뉴바 구현을 위한 코드
+        menuActivity = new MenuActivity(this);
 
         // 재생관련 버튼 초기화
         playImageBtn = findViewById(R.id.playImageBtn);
@@ -132,7 +134,7 @@ public class AudioFileActivity extends AppCompatActivity {
         audioAdapter.setOnItemClickListener(new AudioAdapter.OnIconClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                String uriName = String.valueOf(audioList.get(position));
+                String uriName = audioList.get(position).getUrl(); // 오디오 파일의 URL을 가져옴
                 File file = new File(uriName);
 
                 if (position == lastPlayedPosition) {
@@ -193,8 +195,6 @@ public class AudioFileActivity extends AppCompatActivity {
                 .setUsage(AudioAttributes.USAGE_MEDIA)
                 .build();
         mediaPlayer.setAudioAttributes(audioAttributes);
-
-        //mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
         try {
             mediaPlayer.setDataSource(file.getAbsolutePath());

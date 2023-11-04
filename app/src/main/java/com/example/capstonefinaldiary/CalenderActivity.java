@@ -35,8 +35,7 @@ public class CalenderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calender);
 
         calendarView = findViewById(R.id.calendarView);
-        //menuActivity = new MenuActivity(this, navigationView); // MenuActivity 인스턴스 생성
-        settingSideNavBar();
+        menuActivity = new MenuActivity(this); // MenuActivity 인스턴스 생성
 
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -46,9 +45,10 @@ public class CalenderActivity extends AppCompatActivity {
             }
         });
     }
+    /**
 
     private void settingSideNavBar(){
-        /** 메뉴바 */
+        // 메뉴바
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         navigationView = findViewById(R.id.navigation);
@@ -104,4 +104,5 @@ public class CalenderActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+    */
 }
