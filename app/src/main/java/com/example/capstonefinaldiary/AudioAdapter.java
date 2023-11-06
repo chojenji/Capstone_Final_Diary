@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -23,13 +25,15 @@ import com.example.capstonefinaldiary.Models.AudioFileInfo;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Locale;
 
-public class AudioAdapter extends RecyclerView.Adapter{
+public class AudioAdapter extends RecyclerView.Adapter {
 
     //리사이클러뷰에 넣을 데이터 리스트
     private ArrayList<AudioFileInfo> dataModels;
     // Firebase 오디오 파일 URL을 저장할 리스트
     private Context context;
+    private ArrayList<AudioFileInfo> filteredDataModels;
 
     // 리스너 객체 참조를 저장하는 변수
     private OnIconClickListener listener = null;
@@ -60,8 +64,7 @@ public class AudioAdapter extends RecyclerView.Adapter{
     }
 
     @Override
-    public int getItemCount() {
-        //데이터 리스트의 크기를 전달해주어야 함
+    public int getItemCount(){
         return dataModels.size();
     }
 

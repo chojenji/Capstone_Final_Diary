@@ -14,11 +14,13 @@
     android:layout_height="match_parent"
     tools:context=".AudioFileActivity">
 
-    <include
-        layout="@layout/toolbar" />
+        <include
+            android:id="@+id/include"
+            layout="@layout/toolbar" />
 
 
     <!-- 파일 삭제 버튼 (휴지통)-->
+        <!--
     <ImageView
         android:id="@+id/file_delete"
         android:layout_width="34dp"
@@ -28,37 +30,42 @@
         android:src="@drawable/baseline_delete_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
+        -->
     <!--녹음내역들이 담길 리사이클러뷰-->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toTopOf="@id/seekBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView"
-        app:layout_constraintVertical_bias="0.0" />
 
-    <!-- 검색 창 -->
+        <!-- 검색 창 -->
+        <!--
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
-        android:queryHint="검색어를 입력하시오."
+        app:queryHint="검색할 파일을 입력하시오"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:iconifiedByDefault="false"
         app:layout_constraintHorizontal_bias="0.5" />
+        -->
 
     <!-- 녹음 파일 재생을 위한 SeekBar -->
-    <SeekBar
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="70dp"
+            app:layout_constraintBottom_toTopOf="@id/seekBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/include"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <SeekBar
         android:id="@+id/seekBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,12 +17,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 // 로그인 성공 후 화면
 public class HomeActivity extends AppCompatActivity {
 
     private GoogleSignInClient mSignInClient;
     private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser currentUser;
+    private MenuActivity menuActivity;
 
     ImageView ivProfile;
     TextView tv_Userid;
@@ -34,29 +38,39 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        Intent intent = getIntent();
+        menuActivity = new MenuActivity(this) ; // MenuActivity 인스턴스 생성
 
-        // MainActivity와 똑같이 입력해야 한다
-        String userId = intent.getStringExtra("userId");
-        String userName = getIntent().getStringExtra("userName");
-        String ProfilePic = getIntent().getStringExtra("ProfilePic");
+        // Firebase 인증 및 현재 사용자 가져오기
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        currentUser = mFirebaseAuth.getCurrentUser();
 
         ivProfile = findViewById(R.id.iv_Profile);
         tv_Userid = findViewById(R.id.tv_Userid);
         tv_Username = findViewById(R.id.tv_Username);
         logoutBtn = findViewById(R.id.logout_Btn);
 
-        // 이미지 가져오기
-        Glide.with(this)
-                .load(ProfilePic)
-                .circleCrop()
-                .into(ivProfile);
+        if (currentUser != null) {
+            String userName = currentUser.getDisplayName();
+            String userId = currentUser.getUid();
+            Uri profilePicUri = currentUser.getPhotoUrl();
 
-        // 유저 계정
-        tv_Userid.setText("Userid" + userId);
+            if(userId != null){
+                tv_Userid.setText("UserID : " + userId);
+            }
 
-        // 유저 이름
-        tv_Username.setText("UserName" + userName);
+            if (userName != null) {
+                // 유저 이름 설정
+                tv_Username.setText("UserName : " + userName);
+            }
+
+            if (profilePicUri != null) {
+                // 프로필 이미지 설정
+                Glide.with(this)
+                        .load(profilePicUri)
+                        .circleCrop()
+                        .into(ivProfile);
+            }
+        }
 
         // logout 버튼 클릭 시 초기화
         logoutBtn.setOnClickListener(new View.OnClickListener() {

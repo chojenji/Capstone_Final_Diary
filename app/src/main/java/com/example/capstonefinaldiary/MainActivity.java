@@ -38,9 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private static final int RC_SIGN_IN = 100;
 
-
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,13 +95,18 @@ public class MainActivity extends AppCompatActivity {
                             users1.setUserName(user.getDisplayName());
                             users1.setProfilePic(user.getPhotoUrl().toString());
                             database.getReference().child("users").child(user.getUid()).setValue(users1);
-
+                            /**
                             // 로그인 성공 후 보여줄 데이터(이름, 사진)
-                            Intent intent = new Intent(MainActivity.this, CalenderActivity.class);  // Main 이동
+                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);  // Main 이동
                             intent.putExtra("userId", user.getUid());
                             intent.putExtra("userName", user.getDisplayName());
                             intent.putExtra("ProfilePic", user.getPhotoUrl().toString());
                             startActivity(intent);
+                            */
+                            // 로그인 성공 시 CalenderActivity로 화면 이동
+                            Intent intent1 = new Intent(MainActivity.this, CalenderActivity.class);
+                            startActivity(intent1);
+
                         }
                         // 인증 실패 시
                         else {
@@ -121,8 +123,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
-
 }

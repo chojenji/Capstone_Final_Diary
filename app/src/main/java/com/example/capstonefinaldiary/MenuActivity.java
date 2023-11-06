@@ -1,9 +1,12 @@
 package com.example.capstonefinaldiary;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -11,7 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MenuActivity {
 
@@ -29,6 +35,33 @@ public class MenuActivity {
         toolbar = activity.findViewById(R.id.toolbar);
         drawerLayout = activity.findViewById(R.id.drawer);
         navigationView = activity.findViewById(R.id.navigation);
+
+        // Firebase에서 사용자 정보 가져오기
+        FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            // 사용자 정보 가져오기
+            String userName = currentUser.getDisplayName();
+            Uri profilePicUri = currentUser.getPhotoUrl();
+
+            // 헤더 뷰의 ImageView와 TextView에 사용자 정보 설정
+            View headerView = navigationView.getHeaderView(0);
+            ImageView ivProfile = headerView.findViewById(R.id.iv_Profile);
+            TextView tvUsername = headerView.findViewById(R.id.tv_Username);
+
+            if (userName != null) {
+                tvUsername.setText(userName);
+            }
+
+            if (profilePicUri != null) {
+                Glide.with(activity)
+                        .load(profilePicUri)
+                        .circleCrop()
+                        .into(ivProfile);
+            }
+        }
+
         setupNavigationDrawer();
     }
 
@@ -44,7 +77,6 @@ public class MenuActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        //navigationView = activity.findViewById(R.id.navigation);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -82,7 +114,6 @@ public class MenuActivity {
     public void startNewActivity(Class<?> cls) {
         Intent intent = new Intent(activity, cls);
         activity.startActivity(intent);
-        //Toast.makeText(activity, cls.getSimpleName() + " 시작", Toast.LENGTH_SHORT).show();
     }
 
 

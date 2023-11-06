@@ -61,11 +61,12 @@ public class AudioFileActivity extends AppCompatActivity {
     private RecyclerView audioRecyclerView;
     private AudioAdapter audioAdapter;
     private ArrayList<AudioFileInfo> audioList;
+    /** 검색창 */
+    //private SearchView searchView;
+    //private ArrayList<AudioFileInfo> filterList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
-    /** 검색창 */
-    private SearchView searchView;
     /** 메뉴바 */
     private MenuActivity menuActivity; // MenuActivity를 포함할 멤버 변수
 
@@ -183,6 +184,12 @@ public class AudioFileActivity extends AppCompatActivity {
             }
         });
 
+        //searchView = findViewById(R.id.searchView);
+        //filterList = new ArrayList<>();
+
+        // SearchView 리스너 설정
+
+
     }
 
     // 녹음 파일 재생
@@ -202,9 +209,9 @@ public class AudioFileActivity extends AppCompatActivity {
         try {
             // 오디오 속성 설정
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                .setUsage(AudioAttributes.USAGE_MEDIA)
-                .build();
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setUsage(AudioAttributes.USAGE_MEDIA)
+                    .build();
             mediaPlayer.setAudioAttributes(audioAttributes);
             // Firebase Storage에서 오디오 파일 다운로드
             mediaPlayer.setDataSource(audioUrl);
