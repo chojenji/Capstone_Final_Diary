@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center_vertical"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/music_list">
+
+    <ImageView
+        android:id="@+id/playBtn_itemAudio"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="4dp"
+        android:contentDescription="음악 앨범 사진"
+        android:padding="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="4dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/music_Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="노래제목"
+            android:text="제목"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/music_artist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp"
+            android:text="아티스트"
+            android:textColor="#FFFFFF"
+            android:contentDescription="아티스트이름"/>
+
+    </LinearLayout>
+</LinearLayout>
