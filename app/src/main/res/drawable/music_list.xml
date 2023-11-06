@@ -2,6 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 포커스를 받았을때의 모양 및 색상 -->
+    <!-- 밝은 색상으로 선택된 음악 리스트 색상 변경-->
 
     <item android:state_focused="true">
 

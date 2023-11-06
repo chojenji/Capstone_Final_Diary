@@ -83,6 +83,8 @@ public class MenuActivity {
                 int id = item.getItemId();
                 if (id == R.id.menu_setting) {
                     startNewActivity(SettingActivity.class);
+                } else if (id == R.id.home) {
+                    startNewActivity(CalenderActivity.class);
                 } else if (id == R.id.menu_statistics) {
                     startNewActivity(StatisticsActivity.class);
                 } else if (id == R.id.menu_file) {
