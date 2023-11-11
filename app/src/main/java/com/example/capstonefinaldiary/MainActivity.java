@@ -30,6 +30,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+
 public class MainActivity extends AppCompatActivity {
 
     private ImageView loginBtn;
@@ -41,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);         //activity_main.xml 연동
+        setContentView(R.layout.activity_main);
 
         loginBtn = findViewById(R.id.login_btn);
         auth = FirebaseAuth.getInstance();

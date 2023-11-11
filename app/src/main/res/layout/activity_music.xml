@@ -27,20 +27,26 @@
         android:id="@+id/autonew"
         android:layout_width="25dp"
         android:layout_height="25dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="104dp"
         android:layout_marginBottom="30dp"
         android:contentDescription="Refresh"
         android:src="@drawable/baseline_autorenew_24"
+        app:layout_constraintTop_toTopOf="@id/music_seekbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/musicRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="542dp"
-        app:layout_constraintBottom_toBottomOf="@id/music_seekbar"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@id/music_seekbar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.555"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/music_text"
         app:layout_constraintVertical_bias="0.0" />
@@ -50,6 +56,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintTop_toBottomOf="@+id/musicRecyclerView"
         tools:layout_editor_absoluteX="0dp" />
 
@@ -92,7 +100,7 @@
         android:onClick="onClick"
         android:src="@drawable/baseline_play_arrow_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/music_seekbar"
+        app:layout_constraintTop_toTopOf="@id/music_seekbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:contentDescription="재생 시작"

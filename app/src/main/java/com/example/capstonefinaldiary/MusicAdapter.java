@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,12 +25,13 @@ import com.example.capstonefinaldiary.Models.AudioFileInfo;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class MusicAdapter extends RecyclerView.Adapter {
 
     //리사이클러뷰에 넣을 데이터 리스트
-    private ArrayList<String> dataModels;
+    private List<PlaylistItem> playlistItems;
     // Firebase 오디오 파일 URL을 저장할 리스트
     private Context context;
 
@@ -56,21 +58,21 @@ public class MusicAdapter extends RecyclerView.Adapter {
     }
 
     //생성자를 통하여 데이터 리스트 context를 받음
-    public MusicAdapter(Context context, ArrayList<String> dataModels) {
-        this.dataModels = dataModels;
+    public MusicAdapter(Context context, List<PlaylistItem> playlistItems) {
         this.context = context;
+        this.playlistItems = playlistItems;
     }
 
     @Override
     public int getItemCount(){
-        return dataModels.size();
+        return playlistItems.size();
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //자신이 만든 itemview를 inflate한 다음 뷰홀더 생성
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_audio, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_music, parent, false);
         MyViewHolder viewHolder = new MyViewHolder(view);
 
         //생선된 뷰홀더를 리턴하여 onBindViewHolder에 전달한다.
@@ -80,31 +82,41 @@ public class MusicAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        MyViewHolder myViewHolder = (MyViewHolder)holder;
-
-        // ((MyViewHolder) holder).audioTitle.setText(dataModels.get(position).getFilename());
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        MyViewHolder holder1 = (MyViewHolder)holder;
+        PlaylistItem item = playlistItems.get(position);
+        holder1.title.setText(item.getTitle());
+        holder1.artist.setText(item.getArtist());
+        // 이미지 로드 및 설정
+        Glide.with(context)
+                .load(item.getImageUrl())
+                .placeholder(R.drawable.baseline_image_24) // 이미지가 로드되기 전에 표시할 이미지
+                .error(R.drawable.baseline_hide_image_24) // 이미지 로드 오류 시 표시할 이미지
+                .into(((MyViewHolder) holder).album_img);
+        //음악 재생 코드
+        /**
+        holder1.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int pos = holder.getAdapterPosition(); // 인덱스를 동적으로 가져오기
-                if (listener != null && pos != RecyclerView.NO_POSITION) {
-                    listener.onItemClick(view, pos);
+                //int pos = holder.getAdapterPosition(); // 인덱스를 동적으로 가져오기
+                //if (listener != null && pos != RecyclerView.NO_POSITION) {
+                //    listener.onItemClick(view, pos);
                 }
-            }
-        });
+        }); */
     }
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageButton audioBtn;
-        TextView audioTitle;
+        public TextView title, artist;
+        public ImageView album_img;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            audioBtn = itemView.findViewById(R.id.playBtn_itemAudio);
-            audioTitle = itemView.findViewById(R.id.audioTitle_itemAudio);
-
+            audioBtn = itemView.findViewById(R.id.playImageBtn);
+            title = itemView.findViewById(R.id.music_Title);
+            artist = itemView.findViewById(R.id.music_artist);
+            album_img = itemView.findViewById(R.id.album_img);
+            /**
             audioBtn.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -117,7 +129,7 @@ public class MusicAdapter extends RecyclerView.Adapter {
                         }
                     }
                 }
-            });
+            }); */
         }
     }
 }
