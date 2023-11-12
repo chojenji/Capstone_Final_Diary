@@ -42,6 +42,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class RecordActivity extends AppCompatActivity {
 
@@ -60,6 +65,7 @@ public class RecordActivity extends AppCompatActivity {
     private MediaRecorder mediaRecorder;
     private String audioFileName;
     private String fileName;
+    private String recordTime;
     private boolean isRecording = false;
     private boolean isPaused = false; // 녹음이 중지된 상태인지 여부를 나타내는 플래그
     private Uri audioUri = null; // 오디오 파일 uri
@@ -193,10 +199,10 @@ public class RecordActivity extends AppCompatActivity {
             // 처음 녹음을 시작하는 경우, 새로운 파일을 생성합니다.
             // 파일 경로 설정
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HH:mm:ss", Locale.getDefault());
-            String currentTime = sdf.format(new Date());
+            recordTime = sdf.format(new Date());
 
-            audioFileName = getExternalCacheDir().getAbsolutePath() + "/Record_" + currentTime + ".aac";
-            fileName = "Record_" + currentTime + ".aac";
+            audioFileName = getExternalCacheDir().getAbsolutePath() + "/Record_" + recordTime + ".aac";
+            fileName = "Record_" + recordTime + ".aac";
 
             // Firebase Storage 루트 경로 설정 (수정)
             storageRef = storage.getReference().child("audio");
@@ -314,7 +320,8 @@ public class RecordActivity extends AppCompatActivity {
                                         String audioUri = downloadUri.toString();
                                         // 업로드된 파일의 URL을 사용하거나 저장할 수 있습니다.
                                         // 예를 들어 Firebase Realtime Database에 저장할 수 있습니다.
-                                        saveAudioFileInfoToDatabase(fileName, audioUri); // Firebase Realtime Database에 오디오 파일 정보 저장
+                                        saveAudioFileInfoToDatabase(fileName, audioUri,recordTime); // Firebase Realtime Database에 오디오 파일 정보 저장
+                                        sendFileToServer(audioUri); // 이 URL을 Flask 서버로 전송
                                     }
                                 });
 
@@ -392,7 +399,7 @@ public class RecordActivity extends AppCompatActivity {
         }
     }
     // Firebase Realtime Database에 오디오 파일 정보 저장
-    private void saveAudioFileInfoToDatabase(String filename, String url) {
+    private void saveAudioFileInfoToDatabase(String filename, String url, String currentTime) {
         // 오디오 파일 정보를 Firebase Realtime Database에 저장
         // "audios" 노드 아래에 새로운 노드 생성
         String key = databaseReference.push().getKey();
@@ -401,8 +408,33 @@ public class RecordActivity extends AppCompatActivity {
         Map<String, Object> audioInfo = new HashMap<>();
         audioInfo.put("filename", filename);
         audioInfo.put("url", url);
+        audioInfo.put("recordTime", currentTime);
 
         databaseReference.child(key).setValue(audioInfo);
+    }
+    // Firebase 오디오 url 정보 flask 서버 ("/receive_audio")로 전송
+    private void sendFileToServer(String fileUrl) {
+        ApiService apiInterface = RetrofitClient.getApiInterface();
+
+        Call<ResponseBody> call = apiInterface.receiveAudioUrl(fileUrl);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    // 성공적으로 서버에 파일 URL 전송
+                    Toast.makeText(RecordActivity.this, "File URL successfully sent to server", Toast.LENGTH_SHORT).show();
+                } else {
+                    // 서버 응답에 오류가 있는 경우
+                    Toast.makeText(RecordActivity.this, "Server responded with error", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                // 서버로의 전송 실패
+                Toast.makeText(RecordActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

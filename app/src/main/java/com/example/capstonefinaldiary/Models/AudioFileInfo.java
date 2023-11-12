@@ -4,6 +4,7 @@ public class AudioFileInfo {
 
     private String filename; // 오디오 파일 이름
     private String url;      // 오디오 파일 URL
+    private String currentTime; // 오디오 파일 저장 날짜
     private boolean isSearchResult; // 검색 결과 여부
 
     /**
@@ -28,7 +29,8 @@ public class AudioFileInfo {
     public void setUrl(String url) {
         this.url = url;
     }
-
+    public String getCurrentTime(){return currentTime;}
+    public  void setCurrentTime(String currentTime){this.currentTime = currentTime;}
     public boolean isSearchResult() {
         return isSearchResult;
     }

@@ -22,4 +22,8 @@ public class RetrofitClient {
         }
         return retrofit;
     }
+
+    public static ApiService getApiInterface() {
+        return getRetrofitInstance().create(ApiService.class);
+    }
 }

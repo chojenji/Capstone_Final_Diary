@@ -14,7 +14,7 @@
         android:layout_height="60dp"
         android:layout_marginLeft="4dp"
         android:contentDescription="음악 앨범 사진"
-        android:padding="16dp" />
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
