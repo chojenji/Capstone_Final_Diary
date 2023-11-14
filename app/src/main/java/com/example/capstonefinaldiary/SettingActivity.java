@@ -1,5 +1,6 @@
 package com.example.capstonefinaldiary;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -15,7 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -89,11 +94,27 @@ public class SettingActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // GoogleSignInClient 초기화
+                if (mSignInClient == null) {
+                    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                            .requestIdToken(getString(R.string.default_web_client_id))
+                            .requestEmail()
+                            .build();
+                    mSignInClient = GoogleSignIn.getClient(SettingActivity.this, gso);
+                }
+                // 로그아웃 처리
                 if (currentUser != null) {
-                    mSignInClient.signOut();
-                    mFirebaseAuth.signOut();
-                    startActivity(new Intent(SettingActivity.this, MainActivity.class));
-                    finish();
+                    mSignInClient.signOut().addOnCompleteListener(SettingActivity.this,
+                        new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                // Firebase 로그아웃
+                                mFirebaseAuth.signOut();
+                                // MainActivity로 이동
+                                startActivity(new Intent(SettingActivity.this, MainActivity.class));
+                                finish();
+                            }
+                    });
                 }
 
             }
