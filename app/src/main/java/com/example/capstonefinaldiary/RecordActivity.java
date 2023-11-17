@@ -319,9 +319,10 @@ public class RecordActivity extends AppCompatActivity {
                                         // 업로드된 파일의 다운로드 URL을 얻음
                                         String audioUri = downloadUri.toString();
                                         // 업로드된 파일의 URL을 사용하거나 저장할 수 있습니다.
-                                        // 예를 들어 Firebase Realtime Database에 저장할 수 있습니다.
+                                        // 예를 들어 Firebase Realtime Database에 저장할 수 있습니다..
                                         saveAudioFileInfoToDatabase(fileName, audioUri,recordTime); // Firebase Realtime Database에 오디오 파일 정보 저장
-                                        sendFileToServer(audioUri); // 이 URL을 Flask 서버로 전송
+                                        // sendFileToServer(audioUri); // 이 URL을 Flask 서버로 전송
+                                        Toast.makeText(RecordActivity.this, "녹음 파일이 저장되었습니다.", Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
@@ -335,8 +336,6 @@ public class RecordActivity extends AppCompatActivity {
                                 Log.d("MyApp","upload Failed.");
                             }
                         });
-
-                Toast.makeText(RecordActivity.this, "녹음 파일이 저장되었습니다.", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(RecordActivity.this, "녹음 파일이 없습니다.", Toast.LENGTH_SHORT).show();
             }
@@ -412,7 +411,8 @@ public class RecordActivity extends AppCompatActivity {
 
         databaseReference.child(key).setValue(audioInfo);
     }
-    // Firebase 오디오 url 정보 flask 서버 ("/receive_audio")로 전송
+    /**
+    // Firebase 오디오 url 정보 flask 서버 ("/download_audio")로 전송
     private void sendFileToServer(String fileUrl) {
         ApiService apiInterface = RetrofitClient.getApiInterface();
 
@@ -436,6 +436,7 @@ public class RecordActivity extends AppCompatActivity {
             }
         });
     }
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults); // super 호출 추가

@@ -16,8 +16,5 @@ public interface ApiService {
     @GET("/get_playlist")
     Call<List<PlaylistItem>> getPlaylist();
     // PlaylistItem 클래스는 서버에서 받은 플레이리스트 아이템의 데이터를 저장하는 모델 클래스
-
-    @FormUrlEncoded
-    @POST("receive_audio")
-    Call<ResponseBody> receiveAudioUrl(@Field("fileUrl") String fileUrl);
+    
 }
