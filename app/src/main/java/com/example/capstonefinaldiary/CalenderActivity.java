@@ -28,6 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
 import java.util.Locale;
 
 public class CalenderActivity extends AppCompatActivity {
@@ -44,38 +45,52 @@ public class CalenderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calender);
 
         calendarView = findViewById(R.id.calendarView);
-        menuActivity = new MenuActivity(this); // MenuActivity 인스턴스 생성
+        menuActivity = new MenuActivity(this);
         record = findViewById(R.id.record);
-        /**
+
+        // 현재 날짜 가져오기
+        Calendar currentDate = Calendar.getInstance();
+        fetchAudioForDate(currentDate);
+
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                Calendar selectedDate = Calendar.getInstance();
+                selectedDate.set(year, month, dayOfMonth);
+                fetchAudioForDate(selectedDate);
+            }
+        });
+
+        record.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Intent intent = new Intent(CalenderActivity.this, RecordActivity.class);
                 startActivity(intent);
             }
-        });*/
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                // 날짜 형식을 맞추기 위해 month + 1 을 해줌, month는 0부터 시작하기 때문
-                String selectedDate = String.format(Locale.getDefault(), "%04d%02d%02d", year, month + 1, dayOfMonth);
+        });
+    }
 
-                // Firebase Realtime Database에서 해당 날짜의 녹음 파일 메타데이터 검색
-                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("audios");
-                databaseRef.orderByChild("recordTime").startAt(selectedDate).endAt(selectedDate + "\uf8ff")
-                        .limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void fetchAudioForDate(Calendar calendar) {
+        String selectedDate = String.format(Locale.getDefault(), "%04d%02d%02d",
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1,
+                calendar.get(Calendar.DAY_OF_MONTH));
+
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("audios");
+        databaseRef.orderByChild("recordTime").startAt(selectedDate).endAt(selectedDate + "\uf8ff")
+                .limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            // 최신 녹음 파일의 데이터스냅샷을 가져옴
                             DataSnapshot latestSnapshot = dataSnapshot.getChildren().iterator().next();
                             AudioFileInfo audioFile = latestSnapshot.getValue(AudioFileInfo.class);
                             if (audioFile != null) {
                                 TextView diaryTextView = findViewById(R.id.diary);
-                                diaryTextView.setText(audioFile.getFilename()); // TextView에 최신 녹음 파일 이름 표시
+                                diaryTextView.setText(audioFile.getFilename());
                             }
                         } else {
-                            Toast.makeText(CalenderActivity.this, "No audio found for this date", Toast.LENGTH_SHORT).show();
+                            TextView diaryTextView = findViewById(R.id.diary);
+                            diaryTextView.setText("녹음된 일기가 없습니다.");
                         }
                     }
 
@@ -84,14 +99,5 @@ public class CalenderActivity extends AppCompatActivity {
                         Toast.makeText(CalenderActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show();
                     }
                 });
-            }
-        });
-        record.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(CalenderActivity.this, RecordActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 }
