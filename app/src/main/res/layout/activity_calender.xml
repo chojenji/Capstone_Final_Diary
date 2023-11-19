@@ -26,18 +26,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <include
             android:id="@+id/include2"
             layout="@layout/toolbar"
-            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="0dp" />
-
 
         <Button
             android:id="@+id/record"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:layout_marginBottom="200dp"
             android:background="@drawable/bluebtn"
             android:text="녹음하기"
@@ -51,24 +51,25 @@
             android:id="@+id/diary"
             android:layout_width="223dp"
             android:layout_height="79dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="50dp"
             android:text="녹음된 일기가 없습니다."
             android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/calendarView"
-            app:layout_constraintVertical_bias="0.494" />
+            />
 
         <ImageView
             android:id="@+id/emotion_img"
-            android:layout_width="128dp"
-            android:layout_height="81dp"
-            android:layout_marginStart="8dp"
+            android:layout_width="120px"
+            android:layout_height="120px"
+            android:layout_marginStart="50dp"
+            android:layout_marginRight="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/include2"
             app:layout_constraintEnd_toStartOf="@+id/diary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/calendarView"
-            app:srcCompat="@drawable/baseline_insert_emoticon_24" />
+            app:srcCompat="@drawable/default_emotion" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.navigation.NavigationView
