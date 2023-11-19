@@ -8,14 +8,13 @@
     android:layout_marginBottom="10dp"
     android:background="@drawable/etd_box">
 
-    <ImageButton
-        android:id="@+id/playBtn_itemAudio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/audiofile_img"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:padding="16dp"
-        android:src="@drawable/baseline_play_circle_24"
+        android:src="@drawable/default_emotion"
         android:contentDescription="녹음파일목록 아이콘"/>
-    <!-- 만약 감정 이모지가 동적으로 들어갈 수 있다면 넣기 -->
 
     <TextView
         android:id="@+id/audioTitle_itemAudio"

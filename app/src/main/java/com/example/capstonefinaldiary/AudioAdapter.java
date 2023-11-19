@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,8 +34,6 @@ public class AudioAdapter extends RecyclerView.Adapter {
     private ArrayList<AudioFileInfo> dataModels;
     // Firebase 오디오 파일 URL을 저장할 리스트
     private Context context;
-    private ArrayList<AudioFileInfo> filteredDataModels;
-
     // 리스너 객체 참조를 저장하는 변수
     private OnIconClickListener listener = null;
 
@@ -66,6 +65,7 @@ public class AudioAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount(){
         return dataModels.size();
+        //return audioList != null ? audioList.size() : 0;
     }
 
     @NonNull
@@ -82,10 +82,19 @@ public class AudioAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        MyViewHolder myViewHolder = (MyViewHolder)holder;
+        AudioFileInfo audioFileInfo = dataModels.get(position);
+        MyViewHolder myViewHolder = (MyViewHolder) holder;
 
         ((MyViewHolder) holder).audioTitle.setText(dataModels.get(position).getFilename());
-
+        // 여기에서 감정 이미지를 설정합니다.
+        Integer emotion = audioFileInfo.getEmotion();
+        if (emotion != null) {
+            int imageResId = EmotionImageUtils.getEmotionImageResource(emotion);
+            ((MyViewHolder) holder).emotion_img.setImageResource(imageResId);
+        } else {
+            // 감정 데이터가 없는 경우 기본 이미지를 사용합니다.
+            ((MyViewHolder) holder).emotion_img.setImageResource(R.drawable.default_emotion);
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,15 +108,15 @@ public class AudioAdapter extends RecyclerView.Adapter {
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageButton audioBtn;
+        ImageView emotion_img;
         TextView audioTitle;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            audioBtn = itemView.findViewById(R.id.playBtn_itemAudio);
+            emotion_img = itemView.findViewById(R.id.audiofile_img);
             audioTitle = itemView.findViewById(R.id.audioTitle_itemAudio);
 
-            audioBtn.setOnClickListener(new Button.OnClickListener() {
+            emotion_img.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //3. 아이템 클릭 이벤트 핸들러 메스드에서 리스너 객체 메서드 호출
