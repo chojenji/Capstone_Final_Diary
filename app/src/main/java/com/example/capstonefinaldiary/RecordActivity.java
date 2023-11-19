@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -75,13 +76,20 @@ public class RecordActivity extends AppCompatActivity {
     private StorageReference audioRef;
     private DatabaseReference databaseReference;
 
+    /** 로딩중 다이얼로그*/
+    // 클래스 멤버 변수로 LoadingDialog 선언
+    private Loading loading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
+
+        // 로딩 다이얼로그 초기화
+        loading = new Loading(RecordActivity.this);
+
         // Firebase SDK 초기화
         FirebaseApp.initializeApp(this);
-
         // Firebase Realtime Database 레퍼런스 초기화
         databaseReference = FirebaseDatabase.getInstance().getReference("audios");
 
@@ -321,7 +329,7 @@ public class RecordActivity extends AppCompatActivity {
                                         // 업로드된 파일의 URL을 사용하거나 저장할 수 있습니다.
                                         // 예를 들어 Firebase Realtime Database에 저장할 수 있습니다..
                                         saveAudioFileInfoToDatabase(fileName, audioUri,recordTime); // Firebase Realtime Database에 오디오 파일 정보 저장
-                                        // sendFileToServer(audioUri); // 이 URL을 Flask 서버로 전송
+                                        sendFileToServer(); // 이 URL을 Flask 서버로 전송
                                         Toast.makeText(RecordActivity.this, "녹음 파일이 저장되었습니다.", Toast.LENGTH_SHORT).show();
                                     }
                                 });
@@ -332,7 +340,6 @@ public class RecordActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(@NonNull Exception e) {
                                 // 파일 업로드 실패
-                                // ... 실패 시 처리
                                 Log.d("MyApp","upload Failed.");
                             }
                         });
@@ -411,32 +418,66 @@ public class RecordActivity extends AppCompatActivity {
 
         databaseReference.child(key).setValue(audioInfo);
     }
-    /**
-    // Firebase 오디오 url 정보 flask 서버 ("/download_audio")로 전송
-    private void sendFileToServer(String fileUrl) {
-        ApiService apiInterface = RetrofitClient.getApiInterface();
 
-        Call<ResponseBody> call = apiInterface.receiveAudioUrl(fileUrl);
-        call.enqueue(new Callback<ResponseBody>() {
+    // Firebase 오디오파일 download_audio 엔드포인트 요청
+    private void sendFileToServer() {
+        // 로딩 다이얼로그 시작
+        loading.startLoadingDialog();
+
+        ApiService apiService = RetrofitClient.getApiInterface();
+
+        Call<Void> call = apiService.download_audio();
+        call.enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    // 성공적으로 서버에 파일 URL 전송
+                    // 성공적으로 서버에 download_audio 요청
                     Toast.makeText(RecordActivity.this, "File URL successfully sent to server", Toast.LENGTH_SHORT).show();
+                    // 서버에서 음성 처리 완료 후 get_playlist 요청
+                    requestPlaylistFromServer();
                 } else {
                     // 서버 응답에 오류가 있는 경우
+                    loading.dismissDialog();
                     Toast.makeText(RecordActivity.this, "Server responded with error", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 // 서버로의 전송 실패
                 Toast.makeText(RecordActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
     }
-     */
+    // 서버에서 플레이리스트 요청
+    private void requestPlaylistFromServer() {
+        ApiService apiService = RetrofitClient.getApiInterface();
+        apiService.getPlaylist().enqueue(new Callback<List<PlaylistItem>>() {
+            @Override
+            public void onResponse(Call<List<PlaylistItem>> call, Response<List<PlaylistItem>> response) {
+                // 로딩 다이얼로그 종료
+                loading.dismissDialog();
+
+                if (response.isSuccessful()) {
+                    // MusicActivity로 이동
+                    Intent intent = new Intent(RecordActivity.this, MusicActivity.class);
+                    intent.putParcelableArrayListExtra("playlist", new ArrayList<PlaylistItem>(response.body()));
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(RecordActivity.this, "Failed to get the playlist", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<PlaylistItem>> call, Throwable t) {
+                loading.dismissDialog();
+                Toast.makeText(RecordActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults); // super 호출 추가

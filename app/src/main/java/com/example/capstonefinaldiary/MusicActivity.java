@@ -47,13 +47,20 @@ public class MusicActivity extends AppCompatActivity {
 
 
         // 화면이 생성될 때 플레이리스트 데이터 가져오기
-        fetchPlaylist();
+        //fetchPlaylist();
+        // Intent에서 플레이리스트 데이터를 가져옵니다.
+        ArrayList<PlaylistItem> items = getIntent().getParcelableArrayListExtra("playlist");
+        if (items != null) {
+            playlistItems.clear();
+            playlistItems.addAll(items);
+            musicAdapter.notifyDataSetChanged();
+        }
     }
 
     private void fetchPlaylist() {
-        ApiService apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
-        Call<List<PlaylistItem>> call = apiService.getPlaylist();
+        ApiService apiService = RetrofitClient.getApiInterface();
 
+        Call<List<PlaylistItem>> call = apiService.getPlaylist();
         call.enqueue(new Callback<List<PlaylistItem>>() {
             @Override
             public void onResponse(Call<List<PlaylistItem>> call, Response<List<PlaylistItem>> response) {
@@ -62,15 +69,15 @@ public class MusicActivity extends AppCompatActivity {
                     playlistItems.addAll(response.body());
                     musicAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                    // 서버 응답이 에러일 경우의 처리
+                    Toast.makeText(getApplicationContext(), "Server Error: " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<List<PlaylistItem>> call, Throwable t) {
-                // 네트워크 요청 실패 시 처리
-                Log.e("MusicActivity", "Network Error: " + t.getMessage());
-                Toast.makeText(getApplicationContext(), "네트워크 실패",Toast.LENGTH_SHORT).show();
+                // 네트워크 요청 실패 시의 처리
+                Toast.makeText(getApplicationContext(), "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
