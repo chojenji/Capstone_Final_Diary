@@ -10,7 +10,7 @@
         android:id="@+id/loadingImage"
         android:layout_width="200px"
         android:layout_height="200px"
-        android:src="@drawable/loading"
+        android:src="@drawable/load_final"
         />
 
 </RelativeLayout>
