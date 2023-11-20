@@ -1,4 +1,5 @@
 package com.example.capstonefinaldiary;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +17,7 @@ import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -86,50 +88,49 @@ public class MusicAdapter extends RecyclerView.Adapter {
         PlaylistItem item = playlistItems.get(position);
         holder1.title.setText(item.getTitle());
         holder1.artist.setText(item.getArtist());
+
         // 이미지 로드 및 설정
         Glide.with(context)
                 .load(item.getImageUrl())
                 .placeholder(R.drawable.baseline_image_24) // 이미지가 로드되기 전에 표시할 이미지
                 .error(R.drawable.baseline_hide_image_24) // 이미지 로드 오류 시 표시할 이미지
                 .into(((MyViewHolder) holder).album_img);
-        //음악 재생 코드
-        /**
+        //음악 재생 코드 -> 스포티파이로 이동 및 연결
         holder1.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //int pos = holder.getAdapterPosition(); // 인덱스를 동적으로 가져오기
-                //if (listener != null && pos != RecyclerView.NO_POSITION) {
-                //    listener.onItemClick(view, pos);
-                }
-        }); */
+                String trackUri = "spotify:track:" + item.getId(); // URI 생성
+                openSpotifyTrack(trackUri); // item.getId()는 해당 트랙의 Spotify URI를 반환
+            }
+        });
+    }
+
+    private void openSpotifyTrack(String trackUri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(trackUri));
+        intent.putExtra(Intent.EXTRA_REFERRER,
+                Uri.parse("android-app://" + context.getPackageName()));
+
+        // 스포티파이 앱이 설치되어 있는지 확인
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(intent);
+        } else {
+            // 스포티파이 앱이 없으면 사용자에게 설치하도록 유도
+            Toast.makeText(context, "Spotify 앱이 설치되어 있지 않습니다.", Toast.LENGTH_LONG).show();
+            // 여기에 스포티파이 앱 설치 페이지로 이동하는 코드를 추가할 수 있습니다.
+        }
     }
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageButton audioBtn;
         public TextView title, artist;
         public ImageView album_img;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            audioBtn = itemView.findViewById(R.id.playImageBtn);
             title = itemView.findViewById(R.id.music_Title);
             artist = itemView.findViewById(R.id.music_artist);
             album_img = itemView.findViewById(R.id.album_img);
-            /**
-            audioBtn.setOnClickListener(new Button.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //3. 아이템 클릭 이벤트 핸들러 메스드에서 리스너 객체 메서드 호출
-                    int pos = getAdapterPosition();
-                    if (pos != RecyclerView.NO_POSITION) {
-                        // 리스너 객체의 메서드 호출.
-                        if (listener != null) {
-                            listener.onItemClick(view, pos) ;
-                        }
-                    }
-                }
-            }); */
+
         }
     }
 }
