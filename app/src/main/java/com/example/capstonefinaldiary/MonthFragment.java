@@ -65,7 +65,6 @@ public class MonthFragment extends Fragment {
         btnNextMonth.setOnClickListener(v -> changeMonth(1));
 
         fetchEmotionData();
-        updateMonthTextView();
         return view;
     }
 
@@ -90,17 +89,26 @@ public class MonthFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         int[] emotionCounts = new int[7]; // 7가지 감정에 대한 카운트
+                        int maxEmotionIndex = -1;
+                        int maxEmotionValue = 0;
 
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             AudioFileInfo audioFile = snapshot.getValue(AudioFileInfo.class);
                             if (audioFile != null && audioFile.getEmotion() != null) {
                                 int emotionIndex = audioFile.getEmotion();
                                 emotionCounts[emotionIndex]++;
+                                // 최대 감정 값 업데이트
+                                if (emotionCounts[emotionIndex] > maxEmotionValue) {
+                                    maxEmotionValue = emotionCounts[emotionIndex];
+                                    maxEmotionIndex = emotionIndex;
+                                }
                             }
                         }
 
                         // 원그래프에 데이터를 표시합니다.
                         displayPieChart(emotionCounts);
+                        // updateMonthTextView를 여기서 호출합니다.
+                        updateMonthTextView(maxEmotionIndex);
                     }
 
                     @Override
@@ -127,42 +135,31 @@ public class MonthFragment extends Fragment {
         monthPieChart.animateY(1400, Easing.EaseInOutQuad);
         monthPieChart.invalidate();
     }
-
-    private void tv_view(){
-        // FirebaseUser 객체를 가져옵니다.
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        // 현재 날짜의 월을 가져옵니다.
-        Calendar calendar = Calendar.getInstance();
-        int currentMonth = calendar.get(Calendar.MONTH) + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
-
-        if (currentUser != null) {
-            // 사용자 이름을 TextView에 설정합니다.
-            String userName = currentUser.getDisplayName();
-            String monthText = currentMonth + "월 ";
-
-            if (userName != null && !userName.isEmpty()) {
-                tv_month.setText(monthText + userName + "님의 감정은 \n00입니다.");
-            } else {
-                tv_month.setText(monthText + "사용자님의 감정은 \n00입니다.");
-            }
-        }
-    }
     private void changeMonth(int amount) {
         currentCalendar.add(Calendar.MONTH, amount);
         fetchEmotionData();
-        updateMonthTextView();
     }
 
-    private void updateMonthTextView() {
+    private void updateMonthTextView(int maxEmotionIndex) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월", Locale.getDefault());
         month.setText(sdf.format(currentCalendar.getTime()));
+
+        String emotion = getEmotionText(maxEmotionIndex); // 이 메서드는 감정 인덱스를 감정 텍스트로 변환합니다.
 
         // 현재 로그인한 사용자의 이름을 가져와서 텍스트 뷰에 설정
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             String userName = currentUser.getDisplayName();
             String userText = (userName != null && !userName.isEmpty()) ? userName + "님의 " : "사용자의 ";
-            tv_month.setText(String.format(Locale.getDefault(), "%s 감정은 \n00입니다.", userText));
+            tv_month.setText(String.format(Locale.getDefault(), "%s 감정은 \n%s입니다.", userText, emotion));
+        }
+    }
+    private String getEmotionText(int emotionIndex) {
+        String[] emotions = {"행복", "슬픔", "분노", "놀람", "공포", "혐오", "중립"};
+        if (emotionIndex >= 0 && emotionIndex < emotions.length) {
+            return emotions[emotionIndex];
+        } else {
+            return "알 수 없는 감정";
         }
     }
 }
