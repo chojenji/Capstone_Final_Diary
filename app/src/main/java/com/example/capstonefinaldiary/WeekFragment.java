@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.capstonefinaldiary.Models.AudioFileInfo;
 import com.github.mikephil.charting.animation.Easing;
@@ -17,6 +18,8 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +34,8 @@ import java.util.Locale;
 public class WeekFragment extends Fragment {
     View view;
     private PieChart weekPieChart;
+    private TextView tv_week;
+
     public WeekFragment() {
         // Required empty public constructor
     }
@@ -47,7 +52,11 @@ public class WeekFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.week_fragment, container, false);
         weekPieChart = view.findViewById(R.id.weekPieChart);
+        tv_week = view.findViewById(R.id.tv_week);
+
         fetchEmotionData(); // 데이터를 가져와 원그래프를 표시합니다.
+        tv_view();
+
         return view;
     }
     private void fetchEmotionData() {
@@ -114,4 +123,19 @@ public class WeekFragment extends Fragment {
         weekPieChart.animateY(1400, Easing.EaseInOutQuad); // Y축 기준 애니메이션 적용
         weekPieChart.invalidate(); // 차트를 갱신합니다.
     }
+
+    private void tv_view(){
+        // FirebaseUser 객체를 가져옵니다.
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            // 사용자 이름을 TextView에 설정합니다.
+            String userName = currentUser.getDisplayName();
+            if (userName != null && !userName.isEmpty()) {
+                tv_week.setText("이번주 " + userName + "님의 감정은 \n00입니다.");
+            } else {
+                tv_week.setText("이번주 사용자님의 감정은 \n00입니다.");
+            }
+        }
+    }
+
 }
