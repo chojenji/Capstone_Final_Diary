@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".StatisticsActivity">
+
+   <androidx.constraintlayout.widget.ConstraintLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+      <include
+          android:id="@+id/include2"
+          layout="@layout/toolbar"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          tools:layout_editor_absoluteX="0dp"
+          tools:layout_editor_absoluteY="0dp" />
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          app:layout_constraintTop_toBottomOf="@id/include2"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintRight_toRightOf="parent">
+
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal"
+             android:layout_marginTop="40dp">
+
+            <TextView
+                android:id="@+id/tv_week"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="WEEK"
+                android:textSize="12pt"
+                android:textStyle="bold"
+                android:padding="4dp"/>
+
+            <TextView
+                android:id="@+id/tv_month"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="MONTH"
+                android:textSize="12pt"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:padding="4dp"/>
+
+         </LinearLayout>
+
+         <TextView
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="이번주 000님의 감정은 \n00입니다."
+             android:textSize="13pt"
+             android:textStyle="bold"
+             android:gravity="center"
+             android:layout_marginTop="20dp"/>
+
+         <com.github.mikephil.charting.charts.PieChart
+             android:id="@+id/chart"
+             android:layout_width="match_parent"
+             android:layout_height="300dp"
+             android:layout_marginTop="20dp"/>
+      </LinearLayout>
+   </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>
