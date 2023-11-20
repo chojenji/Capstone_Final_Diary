@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ public class MusicActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MusicAdapter musicAdapter;
     private List<PlaylistItem> playlistItems = new ArrayList<>();
+    private ImageView autonew;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +46,10 @@ public class MusicActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         musicAdapter = new MusicAdapter(this, playlistItems);
         recyclerView.setAdapter(musicAdapter);
-
+        autonew = findViewById(R.id.autonew);
 
         // 화면이 생성될 때 플레이리스트 데이터 가져오기
-        //fetchPlaylist();
+        fetchPlaylist();
         // Intent에서 플레이리스트 데이터를 가져옵니다.
         ArrayList<PlaylistItem> items = getIntent().getParcelableArrayListExtra("playlist");
         if (items != null) {
@@ -55,6 +57,13 @@ public class MusicActivity extends AppCompatActivity {
             playlistItems.addAll(items);
             musicAdapter.notifyDataSetChanged();
         }
+        //새로고침 버튼 클릭시 새로운 플레이리스트 추출
+        autonew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fetchPlaylist();
+            }
+        });
     }
 
     private void fetchPlaylist() {
