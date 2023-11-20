@@ -21,59 +21,42 @@
           tools:layout_editor_absoluteX="0dp"
           tools:layout_editor_absoluteY="0dp" />
 
-      <LinearLayout
+      <com.google.android.material.tabs.TabLayout
+          android:id="@+id/tab"
           android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          app:layout_constraintTop_toBottomOf="@id/include2"
+          android:layout_height="50dp"
+          android:background="@android:color/white"
+          app:layout_constraintTop_toBottomOf="@+id/include2"
           app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toRightOf="parent">
+          app:layout_constraintRight_toRightOf="parent"
+          app:contentDescription="tab_description">
+      </com.google.android.material.tabs.TabLayout>
 
-         <LinearLayout
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:orientation="horizontal"
-             android:layout_marginTop="40dp">
+      <androidx.viewpager.widget.ViewPager
+          android:id="@+id/viewPager"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
+          app:layout_constraintTop_toBottomOf="@id/tab"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:contentDescription="view_description">
 
-            <TextView
-                android:id="@+id/tv_week"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="WEEK"
-                android:textSize="12pt"
-                android:textStyle="bold"
-                android:padding="4dp"/>
+      </androidx.viewpager.widget.ViewPager>
 
-            <TextView
-                android:id="@+id/tv_month"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="MONTH"
-                android:textSize="12pt"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:padding="4dp"/>
-
-         </LinearLayout>
-
-         <TextView
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:text="이번주 000님의 감정은 \n00입니다."
-             android:textSize="13pt"
-             android:textStyle="bold"
-             android:gravity="center"
-             android:layout_marginTop="20dp"/>
-
-         <com.github.mikephil.charting.charts.PieChart
-             android:id="@+id/chart"
-             android:layout_width="match_parent"
-             android:layout_height="300dp"
-             android:layout_marginTop="20dp"/>
-      </LinearLayout>
    </androidx.constraintlayout.widget.ConstraintLayout>
+
+   <com.google.android.material.navigation.NavigationView
+       android:id="@+id/navigation"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       app:layout_constraintTop_toTopOf="parent"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       android:layout_gravity="start|left"
+       app:headerLayout="@layout/header"
+       app:menu="@menu/menu_main">
+
+   </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

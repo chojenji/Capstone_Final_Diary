@@ -2,7 +2,10 @@ package com.example.capstonefinaldiary;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -13,6 +16,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,80 +32,55 @@ import java.util.Locale;
 public class StatisticsActivity extends AppCompatActivity {
 
     private PieChart pieChart;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private FragmentAdapter adapter;
+    private ArrayList <String> tabNames = new ArrayList<>();
+    private MenuActivity menuActivity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistics);
+        menuActivity = new MenuActivity(this);
 
-        pieChart = findViewById(R.id.chart);
+        loadTabName();
+        setTabLayout();
+        setViewPager();
 
         // Firebase에서 데이터를 가져오는 함수를 호출합니다.
-        fetchEmotionData();
+        // fetchEmotionData();
     }
-
-    private void fetchEmotionData() {
-        // Firebase 데이터베이스의 참조를 가져옵니다.
-        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("audios");
-
-        // 현재 날짜로부터 해당 주의 시작(일요일)과 끝(토요일) 날짜를 구합니다.
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd", Locale.getDefault());
-
-        // 일요일로 설정
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-        String startOfWeek = sdf.format(calendar.getTime());
-
-        // 토요일로 설정
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
-        String endOfWeek = sdf.format(calendar.getTime());
-
-        // 해당 주의 데이터를 조회합니다.
-        databaseRef.orderByChild("recordTime").startAt(startOfWeek).endAt(endOfWeek + "\uf8ff").addListenerForSingleValueEvent(new ValueEventListener() {
+    @TargetApi(Build.VERSION_CODES.N)
+    private void setTabLayout(){
+        tabLayout = findViewById(R.id.tab);
+        tabNames.stream().forEach(name ->tabLayout.addTab(tabLayout.newTab().setText(name)));
+    }
+    private void loadTabName(){
+        tabNames.add("WEEK");
+        tabNames.add("MONTH");
+    }
+    private void setViewPager() {
+        adapter = new FragmentAdapter(getSupportFragmentManager());
+        viewPager = findViewById(R.id.viewPager);
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // 감정 데이터를 저장할 배열을 초기화합니다.
-                int[] emotionCounts = new int[7]; // 7가지 감정에 대한 카운트
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-                // 데이터 스냅샷을 순회하면서 감정 데이터를 카운트합니다.
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    AudioFileInfo audioFile = snapshot.getValue(AudioFileInfo.class);
-                    if (audioFile != null && audioFile.getEmotion() != null) {
-                        int emotionIndex = audioFile.getEmotion();
-                        emotionCounts[emotionIndex]++;
-                    }
-                }
-
-                // 원그래프에 데이터를 표시합니다.
-                displayPieChart(emotionCounts);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // 데이터를 가져오는 중 에러가 발생한 경우
-                Log.e("StatisticsActivity", "Database error", databaseError.toException());
+            public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
     }
 
-    private void displayPieChart(int[] emotionCounts) {
-        ArrayList<PieEntry> entries = new ArrayList<>();
-
-        // 각 감정에 대한 엔트리를 추가합니다.
-        for (int i = 0; i < emotionCounts.length; i++) {
-            if (emotionCounts[i] > 0) { // 횟수가 0보다 큰 감정만 추가
-                entries.add(new PieEntry(emotionCounts[i], "Emotion " + i));
-                Log.d("StatisticsActivity", "Emotion " + i + " count: " + emotionCounts[i]);
-            }
-        }
-
-        PieDataSet dataSet = new PieDataSet(entries, "Emotion Distribution");
-        // + 데이터셋 스타일링 (예: 색상 설정)
-        dataSet.setColors(ColorTemplate.COLORFUL_COLORS); // 색상 설정
-        PieData data = new PieData(dataSet);
-        pieChart.setData(data);
-        pieChart.setDescription(null); // 설명 텍스트 제거
-        pieChart.animateY(1400, Easing.EaseInOutQuad); // Y축 기준 애니메이션 적용
-        pieChart.invalidate(); // 차트를 갱신합니다.
-    }
 }
