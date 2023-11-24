@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    android:orientation="vertical">
 
 
     <ImageView
@@ -11,6 +12,17 @@
         android:layout_width="200px"
         android:layout_height="200px"
         android:src="@drawable/load_final"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1분 내로 분석이 완료됩니다."
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
         />
 
-</RelativeLayout>
+</LinearLayout>
