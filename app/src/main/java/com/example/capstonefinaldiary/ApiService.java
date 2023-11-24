@@ -18,7 +18,7 @@ public interface ApiService {
     Call<List<PlaylistItem>> getPlaylist();
     // PlaylistItem 클래스는 서버에서 받은 플레이리스트 아이템의 데이터를 저장하는 모델 클래스
 
-     @GET("/download_audio")
+     @POST("/download_audio")
      Call<Void> download_audio();
 
 }

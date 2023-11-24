@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/baseline_keyboard_arrow_right_24"
                 android:background="#00ff0000"
-                 />
+                />
         </LinearLayout>
 
 
@@ -52,16 +52,19 @@
             android:id="@+id/tv_month"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:gravity="center"
             android:text="00월 000님의 감정은 \n00입니다."
             android:textSize="13pt"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/month" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/monthPieChart"
             android:layout_width="match_parent"
-            android:layout_height="300dp" />
+            android:layout_height="292dp"
+            android:layout_marginTop="45dp"
+            android:layout_marginBottom="60dp" />
     </LinearLayout>
 
 </FrameLayout>

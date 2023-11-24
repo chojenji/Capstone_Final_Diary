@@ -11,8 +11,9 @@ public class RetrofitClient {
     // Flask 서버가 실행 중인 주소와 포트
     //private static final String BASE_URL = "http://localhost:8080"; // Flask 서버 주소
     //ipv4 주소 : 172.30.1.26
-    //private static final String BASE_URL = "http://10.0.2.2:5000"; // 로컬 개발환경 에뮬레이터 사용 시
-    private static final String BASE_URL = "http://172.30.1.26:5000";
+    private static final String BASE_URL = "http://10.0.2.2:5000"; // 로컬 개발환경 에뮬레이터 사용 시
+    //private static final String BASE_URL = "http://192.168.1.2:5000";
+    //private static final String BASE_URL = "172.30.1.26:5000";
 
     private static Retrofit retrofit = null;
 

@@ -1,4 +1,5 @@
 package com.example.capstonefinaldiary;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,13 +111,20 @@ public class MusicAdapter extends RecyclerView.Adapter {
         intent.putExtra(Intent.EXTRA_REFERRER,
                 Uri.parse("android-app://" + context.getPackageName()));
 
-        // 스포티파이 앱이 설치되어 있는지 확인
-        if (intent.resolveActivity(context.getPackageManager()) != null) {
+        try {
             context.startActivity(intent);
-        } else {
-            // 스포티파이 앱이 없으면 사용자에게 설치하도록 유도
-            Toast.makeText(context, "Spotify 앱이 설치되어 있지 않습니다.", Toast.LENGTH_LONG).show();
-            // 여기에 스포티파이 앱 설치 페이지로 이동하는 코드를 추가할 수 있습니다.
+        } catch (ActivityNotFoundException e) {
+            // 스포티파이 앱이 설치되어 있지 않거나 문제가 발생했을 때
+            Toast.makeText(context, "Spotify 앱이 설치되어 있지 않거나 링크를 처리할 수 없습니다.", Toast.LENGTH_LONG).show();
+
+            // 스포티파이 앱 설치 페이지로 이동하는 코드 추가 (선택적)
+            Intent installIntent = new Intent(Intent.ACTION_VIEW);
+            installIntent.setData(Uri.parse("market://details?id=com.spotify.music"));
+            if (installIntent.resolveActivity(context.getPackageManager()) != null) {
+                context.startActivity(installIntent);
+            } else {
+                Toast.makeText(context, "구글 플레이 스토어가 설치되어 있지 않습니다.", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

@@ -63,7 +63,7 @@ public class AudioFileActivity extends AppCompatActivity {
     private RecyclerView audioRecyclerView;
     private AudioAdapter audioAdapter;
     private ArrayList<AudioFileInfo> audioList;
-    /** 검색창 */
+
     //private SearchView searchView;
     //private ArrayList<AudioFileInfo> filterList;
     private FirebaseDatabase database;

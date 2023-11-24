@@ -445,7 +445,7 @@ public class RecordActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 // 서버로의 전송 실패
-                Toast.makeText(RecordActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(RecordActivity.this, "Server Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -456,8 +456,6 @@ public class RecordActivity extends AppCompatActivity {
         apiService.getPlaylist().enqueue(new Callback<List<PlaylistItem>>() {
             @Override
             public void onResponse(Call<List<PlaylistItem>> call, Response<List<PlaylistItem>> response) {
-                // 로딩 다이얼로그 종료
-                loading.dismissDialog();
 
                 if (response.isSuccessful()) {
                     // MusicActivity로 이동
@@ -467,12 +465,14 @@ public class RecordActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(RecordActivity.this, "Failed to get the playlist", Toast.LENGTH_SHORT).show();
                 }
+                // 로딩 다이얼로그 종료
+                loading.dismissDialog();
             }
 
             @Override
             public void onFailure(Call<List<PlaylistItem>> call, Throwable t) {
                 loading.dismissDialog();
-                Toast.makeText(RecordActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(RecordActivity.this, "Playlist Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 

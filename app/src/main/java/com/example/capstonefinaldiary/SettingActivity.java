@@ -64,7 +64,7 @@ public class SettingActivity extends AppCompatActivity {
 
             if (userName != null) {
                 // 유저 이름 설정
-                tv_Username.setText("UserName: " + userName);
+                tv_Username.setText(userName + "님");
             }
 
             if (profilePicUri != null) {

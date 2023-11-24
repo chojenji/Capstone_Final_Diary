@@ -10,45 +10,15 @@
     tools:context=".AudioFileActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".AudioFileActivity">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".AudioFileActivity">
 
         <include
             android:id="@+id/include"
             layout="@layout/toolbar" />
 
-
-    <!-- 파일 삭제 버튼 (휴지통)-->
-        <!--
-    <ImageView
-        android:id="@+id/file_delete"
-        android:layout_width="34dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/baseline_delete_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-        -->
-    <!--녹음내역들이 담길 리사이클러뷰-->
-
-        <!-- 검색 창 -->
-        <!--
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        app:queryHint="검색할 파일을 입력하시오"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:iconifiedByDefault="false"
-        app:layout_constraintHorizontal_bias="0.5" />
-        -->
-
-    <!-- 녹음 파일 재생을 위한 SeekBar -->
+        <!-- 녹음 파일 재생을 위한 SeekBar -->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
@@ -66,82 +36,58 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@id/playImageBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyclerview" />
+            android:id="@+id/seekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@id/playImageBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recyclerview" />
 
-    <TextView
-        android:id="@+id/play_time_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@id/seekBar"
-        app:layout_constraintTop_toBottomOf="@id/seekBar"
-        tools:text="00:00"
-        android:contentDescription="진행시간"/>
+        <TextView
+            android:id="@+id/play_time_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/seekBar"
+            app:layout_constraintTop_toBottomOf="@id/seekBar"
+            tools:text="00:00"
+            android:contentDescription="진행시간"/>
 
-    <TextView
-        android:id="@+id/total_time_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@id/seekBar"
-        app:layout_constraintTop_toBottomOf="@id/seekBar"
-        tools:text="00:00"
-        android:contentDescription="종료시간"/>
+        <TextView
+            android:id="@+id/total_time_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@id/seekBar"
+            app:layout_constraintTop_toBottomOf="@id/seekBar"
+            tools:text="00:00"
+            android:contentDescription="종료시간"/>
 
-    <ImageButton
-        android:id="@+id/playImageBtn"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_below="@id/seekBar"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/transparent"
-        android:onClick="onClick"
-        android:src="@drawable/baseline_play_arrow_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/seekBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:contentDescription="재생 시작"
-        />
-    <!--
-    <ImageButton
-        android:id="@+id/stopImageBtn"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_below="@id/seekBar"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/transparent"
-        android:contentDescription="재생 중지"
-        android:onClick="onClick"
-        android:src="@drawable/baseline_pause_24"
-        android:visibility="invisible"
-        app:layout_constraintVertical_weight="2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/seekBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
-        -->
+        <ImageButton
+            android:id="@+id/playImageBtn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/seekBar"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/transparent"
+            android:onClick="onClick"
+            android:src="@drawable/baseline_play_arrow_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/seekBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="재생 시작"
+            />
 
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#5585E8"
+    android:background="#85A48C"
     tools:context=".MainActivity">
 
     <ImageButton
@@ -20,46 +20,49 @@
         android:contentDescription="녹음파일라이브러리"
         android:padding="16dp"/>
 
+    <!--녹음 제어 레이아웃-->
+
+    <!--녹음 실행 및 중지 버튼-->
+
     <TextView
         android:id="@+id/timeText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="225dp"
+        android:gravity="center"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:gravity="center"
         android:text=""
         android:textColor="#000000"
         android:textSize="35dp"
         android:textStyle="bold" />
 
-    <!--녹음 제어 레이아웃웃-->
     <TextView
         android:id="@+id/audioRecordText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/timeText"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="30dp"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="5dp"
         android:gravity="center"
         android:text="버튼을 누르면 녹음이 시작됩니다."
         android:textColor="#000000"
         android:textSize="20dp"
         android:textStyle="bold" />
 
-    <!--녹음 실행 및 중지 버튼-->
     <ImageButton
         android:id="@+id/audioRecordImageBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_below="@id/audioRecordText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
+        android:scaleType="centerInside"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:background="@android:color/transparent"
         android:onClick="onClick"
-        android:src="@drawable/baseline_play_arrow_24"
+        android:src="@drawable/record_start"
         android:contentDescription="녹음 시작"/>
 
     <ImageButton
@@ -67,22 +70,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/audioRecordText"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="7dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="녹음 중지"
+        android:onClick="onClick"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:background="@android:color/transparent"
-        android:onClick="onClick"
         android:src="@drawable/baseline_pause_24"
-        android:visibility="invisible"
-        android:contentDescription="녹음 중지"/>
+        android:visibility="invisible" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_below="@id/audioRecordImageBtn"
+        android:layout_marginTop="21dp"
         android:gravity="center_horizontal"
-        android:layout_below="@id/audioRecordImageBtn">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/saveButton"
@@ -91,11 +94,10 @@
             android:layout_below="@id/audioRecordImageBtn"
             android:layout_centerHorizontal="true"
             android:background="@drawable/bluebtn"
+            android:text="저장"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:visibility="invisible"
-            android:text="저장"
-            />
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/reRecordButton"
@@ -105,10 +107,10 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="20dp"
             android:background="@drawable/bluebtn"
+            android:text="재녹음"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:visibility="invisible"
-            android:text="재녹음" />
+            android:visibility="invisible" />
     </LinearLayout>
 
 
