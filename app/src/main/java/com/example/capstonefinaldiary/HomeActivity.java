@@ -25,20 +25,18 @@ public class HomeActivity extends AppCompatActivity {
     private GoogleSignInClient mSignInClient;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser currentUser;
-    private MenuActivity menuActivity;
+    //private MenuActivity menuActivity;
 
     ImageView ivProfile;
     TextView tv_Userid;
     TextView tv_Username;
-
-    Button logoutBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        menuActivity = new MenuActivity(this) ; // MenuActivity 인스턴스 생성
+        //menuActivity = new MenuActivity(this) ; // MenuActivity 인스턴스 생성
 
         // Firebase 인증 및 현재 사용자 가져오기
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -47,7 +45,6 @@ public class HomeActivity extends AppCompatActivity {
         ivProfile = findViewById(R.id.iv_Profile);
         tv_Userid = findViewById(R.id.tv_Userid);
         tv_Username = findViewById(R.id.tv_Username);
-        logoutBtn = findViewById(R.id.logout_Btn);
 
         if (currentUser != null) {
             String userName = currentUser.getDisplayName();
@@ -72,18 +69,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
 
-        // logout 버튼 클릭 시 초기화
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                mSignInClient.signOut();
-                mFirebaseAuth.signOut();
-                startActivity(new Intent(HomeActivity.this, MainActivity.class));
-                finish();
-
-            }
-        });
 
     }
 }

@@ -36,6 +36,7 @@ public class SettingActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser currentUser;
     private TextView logout;
+    private TextView app_evaluation;
     private MenuActivity menuActivity;
 
     ImageView ivProfile;
@@ -56,6 +57,7 @@ public class SettingActivity extends AppCompatActivity {
 
         ivProfile = findViewById(R.id.iv_Profile);
         tv_Username = findViewById(R.id.tv_Username);
+        app_evaluation = findViewById(R.id.app_evaluation);
         logout = findViewById(R.id.logout);
 
         if (currentUser != null) {
@@ -86,6 +88,17 @@ public class SettingActivity extends AppCompatActivity {
                     Intent intent1 = new Intent(SettingActivity.this, HomeActivity.class);
                     startActivity(intent1);
                 }
+            }
+        });
+
+        app_evaluation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 구글 폼 URL로 교체해주세요.
+                String url = "https://docs.google.com/forms/d/e/1FAIpQLScqePJk4RxZM8ezlDS1j_IpwnY_CUv0VKEuy3VAxcbwkgXZDQ/viewform?usp=sf_link";
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
             }
         });
 
